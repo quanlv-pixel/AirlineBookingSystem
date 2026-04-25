@@ -1,2 +1,4 @@
 .venv/
 airline.db
+__pycache__/
+*.pyc

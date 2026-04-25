@@ -1,0 +1,78 @@
+QWidget {
+    background-color: #f5f7fb;
+    font-family: "Segoe UI";
+    font-size: 14px;
+    color: #1f2937;
+}
+
+/* Card */
+#authCard {
+    background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    min-width: 350px;
+}
+
+/* Logo */
+#logoBox {
+    background-color: #3b82f6;
+    border-radius: 12px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+/* Title */
+#title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #111827;
+}
+
+/* Subtitle */
+#subtitle {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* Input */
+QLineEdit {
+    background-color: #f3f4f6;
+    border-radius: 12px;
+    padding: 10px;
+    border: 1px solid transparent;
+}
+
+QLineEdit:focus {
+    border: 1px solid #3b82f6;
+    background-color: white;
+}
+
+/* Button */
+#primaryBtn {
+    background-color: #0f172a;
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: bold;
+}
+
+#primaryBtn:hover {
+    background-color: #1e293b;
+}
+
+/* Link */
+#linkBtn {
+    background: transparent;
+    border: none;
+    color: #2563eb;
+}
+
+#linkBtn:hover {
+    text-decoration: underline;
+}
+
+/* Small text */
+#smallText {
+    color: #6b7280;
+    font-size: 12px;
+}
