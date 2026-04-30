@@ -1,0 +1,195 @@
+/* ============================================================
+   SkyBoundAir — auth.qss  (PySide6 compatible)
+   ============================================================ */
+
+/* ── Nền toàn màn hình ── */
+QWidget#AuthWindow {
+    background-color: #EEF0F5;
+}
+
+/* ── Card trắng bo góc ── */
+QFrame#AuthCard {
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    border: none;
+}
+
+/* ── Logo frame gradient ── */
+QFrame#LogoFrame {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #3B82F6, stop:1 #2563EB);
+    border-radius: 14px;
+    border: none;
+    min-width: 52px;
+    min-height: 52px;
+    max-width: 52px;
+    max-height: 52px;
+}
+
+/* ── Brand subtitle ── */
+QLabel#BrandSub {
+    font-size: 13px;
+    color: #8A93A6;
+    background: transparent;
+}
+
+/* ── Field labels (FIRST NAME, EMAIL...) ── */
+QLabel#FieldLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #8A93A6;
+    background: transparent;
+}
+
+/* ── Input thường (First/Last name, không icon) ── */
+QLineEdit#PlainInput {
+    border: 1px solid #E8EBF0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #111111;
+    background-color: #FAFBFC;
+    selection-background-color: #BFDBFE;
+    selection-color: #111111;
+}
+
+QLineEdit#PlainInput:focus {
+    border: 1px solid #3B82F6;
+    background-color: #FFFFFF;
+}
+
+QLineEdit#PlainInput:hover {
+    border: 1px solid #C5CAD4;
+}
+
+/* ── Input bên trong IconLineEdit (không viền, trong suốt) ── */
+QFrame#InputFrame {
+    border: 1px solid #E8EBF0;
+    border-radius: 10px;
+    background-color: #FAFBFC;
+    min-height: 46px;
+    max-height: 46px;
+}
+
+QFrame#InputFrame:hover {
+    border: 1px solid #C5CAD4;
+}
+
+QFrame#InputFrame[focused="true"] {
+    border: 1px solid #3B82F6;
+    background-color: #FFFFFF;
+}
+
+/* ── Primary button (Create Account / Sign In) ── */
+QPushButton#BtnPrimary {
+    background-color: #111111;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 50px;
+}
+
+QPushButton#BtnPrimary:hover {
+    background-color: #2A2A2A;
+}
+
+QPushButton#BtnPrimary:pressed {
+    background-color: #3D3D3D;
+}
+
+QPushButton#BtnPrimary:disabled {
+    background-color: #9CA3AF;
+    color: #E5E7EB;
+}
+
+/* ── Social buttons (Google / Github) ── */
+QPushButton#BtnSocial {
+    background-color: #FAFBFC;
+    color: #374151;
+    border: 1px solid #E8EBF0;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    min-height: 42px;
+}
+
+QPushButton#BtnSocial:hover {
+    border: 1px solid #C5CAD4;
+    background-color: #FFFFFF;
+}
+
+QPushButton#BtnSocial:pressed {
+    background-color: #F3F4F6;
+    border: 1px solid #D1D5DB;
+}
+
+/* ── Link buttons (Log in / Sign up for free) ── */
+QPushButton#LinkBtn {
+    background-color: transparent;
+    border: none;
+    color: #3B82F6;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0px;
+    text-align: left;
+}
+
+QPushButton#LinkBtn:hover {
+    color: #2563EB;
+}
+
+QPushButton#LinkBtn:pressed {
+    color: #1D4ED8;
+}
+
+/* ── Forgot password ── */
+QPushButton#ForgotBtn {
+    background-color: transparent;
+    border: none;
+    color: #3B82F6;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 0px;
+}
+
+QPushButton#ForgotBtn:hover {
+    color: #2563EB;
+}
+
+/* ── Footer text ── */
+QLabel#FooterText {
+    font-size: 13px;
+    color: #8A93A6;
+    background: transparent;
+}
+
+/* ── Divider label (OR EXPLORE AS GUEST) ── */
+QLabel#DividerLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #B8BEC9;
+    background: transparent;
+}
+
+/* ── Error box ── */
+QLabel#ErrorLabel {
+    font-size: 12px;
+    color: #EF4444;
+    background-color: #FEF2F2;
+    border: 1px solid #FECACA;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+/* ── Success box ── */
+QLabel#SuccessLabel {
+    font-size: 12px;
+    color: #16A34A;
+    background-color: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
