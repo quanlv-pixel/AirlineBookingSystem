@@ -12,7 +12,7 @@ from database.db import get_connection
 # ─── Helpers ───────────────────────────────────────────────────────────────
 
 def _hash_password(password: str, salt: str = None) -> tuple[str, str]:
-    """Trả về (hashed_password, salt)."""
+    """Băm mật khẩu kết hợp với salt sử dụng SHA-256."""
     if salt is None:
         salt = secrets.token_hex(16)
     hashed = hashlib.sha256((salt + password).encode()).hexdigest()
@@ -29,27 +29,6 @@ def _validate_password(password: str) -> tuple[bool, str]:
     if len(password) < 6:
         return False, "Mật khẩu phải có ít nhất 6 ký tự."
     return True, ""
-
-
-# ─── Database Setup ────────────────────────────────────────────────────────
-
-def ensure_users_table():
-    """Tạo bảng users nếu chưa tồn tại."""
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id            INTEGER PRIMARY KEY AUTOINCREMENT,
-            first_name    TEXT    NOT NULL,
-            last_name     TEXT    NOT NULL,
-            email         TEXT    NOT NULL UNIQUE,
-            password_hash TEXT    NOT NULL,
-            salt          TEXT    NOT NULL,
-            created_at    TEXT    DEFAULT (datetime('now'))
-        )
-    """)
-    conn.commit()
-    conn.close()
 
 
 # ─── Register ──────────────────────────────────────────────────────────────
@@ -79,10 +58,11 @@ def register_user(first_name: str, last_name: str,
     try:
         conn = get_connection()
         cursor = conn.cursor()
+        # Thêm default role là 'customer' khi đăng ký tài khoản mới
         cursor.execute("""
-            INSERT INTO users (first_name, last_name, email, password_hash, salt)
-            VALUES (?, ?, ?, ?, ?)
-        """, (first_name, last_name, email, hashed, salt))
+            INSERT INTO users (first_name, last_name, email, password_hash, salt, role)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (first_name, last_name, email, hashed, salt, "customer"))
         conn.commit()
         conn.close()
         return True, "Đăng ký thành công!"
@@ -107,8 +87,9 @@ def login_user(email: str, password: str) -> tuple[bool, str, dict | None]:
     try:
         conn = get_connection()
         cursor = conn.cursor()
+        # Truy vấn thêm cột 'role' từ DB
         cursor.execute(
-            "SELECT id, first_name, last_name, email, password_hash, salt "
+            "SELECT id, first_name, last_name, email, password_hash, salt, role "
             "FROM users WHERE email = ?",
             (email,)
         )
@@ -118,12 +99,22 @@ def login_user(email: str, password: str) -> tuple[bool, str, dict | None]:
         if row is None:
             return False, "Email hoặc mật khẩu không đúng.", None
 
-        user_id, first, last, db_email, db_hash, salt = row
+        # Truy xuất an toàn từ Row theo tên cột
+        user_id  = row["id"]
+        first    = row["first_name"]
+        last     = row["last_name"]
+        db_email = row["email"]
+        db_hash  = row["password_hash"]
+        salt     = row["salt"]
+        role     = row["role"]
+
+        # Kiểm tra mật khẩu băm
         hashed, _ = _hash_password(password, salt)
 
         if hashed != db_hash:
             return False, "Email hoặc mật khẩu không đúng.", None
 
+        # Trả về đầy đủ thông tin người dùng
         user_info = {
             "id":         user_id,
             "first_name": first,
@@ -131,6 +122,7 @@ def login_user(email: str, password: str) -> tuple[bool, str, dict | None]:
             "email":      db_email,
             "full_name":  f"{first} {last}",
             "initials":   f"{first[0]}{last[0]}".upper(),
+            "role":       role
         }
         return True, "Đăng nhập thành công!", user_info
 

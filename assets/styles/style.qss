@@ -1,78 +1,118 @@
+/* Tổng thể ứng dụng */
 QWidget {
-    background-color: #f5f7fb;
-    font-family: "Segoe UI";
-    font-size: 14px;
-    color: #1f2937;
+    font-family: "Segoe UI", "Arial";
 }
 
-/* Card */
-#authCard {
-    background-color: white;
+/* ── AUTHENTICATION STYLE (Login/Register) ── */
+QWidget#AuthWindow {
+    background-color: #EEF0F5;
+}
+
+QFrame#AuthCard {
+    background-color: #FFFFFF;
     border-radius: 20px;
-    padding: 30px;
-    min-width: 350px;
 }
 
-/* Logo */
-#logoBox {
-    background-color: #3b82f6;
-    border-radius: 12px;
-    min-width: 40px;
-    min-height: 40px;
-}
-
-/* Title */
-#title {
+QLabel#Title {
     font-size: 22px;
     font-weight: bold;
     color: #111827;
 }
 
-/* Subtitle */
-#subtitle {
-    color: #6b7280;
-    font-size: 13px;
+/* ── DASHBOARD STYLE ── */
+QWidget#DashboardWindow {
+    background-color: #F8FAFC;
 }
 
-/* Input */
-QLineEdit {
-    background-color: #f3f4f6;
+QFrame#SidebarFrame {
+    background-color: #005088;
+    border: none;
+}
+
+QLabel#SidebarBrand {
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+QLabel#SidebarSubBrand {
+    color: #11CAA0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+/* Sidebar Buttons */
+QPushButton#SidebarBtn, QPushButton#SidebarBtnActive {
+    background-color: transparent;
+    border: none;
+    border-radius: 8px;
+    color: #CDD6E2;
+    font-size: 14px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+QPushButton#SidebarBtn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #FFFFFF;
+}
+
+QPushButton#SidebarBtnActive {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #11CAA0;
+    font-weight: 700;
+}
+
+/* Thẻ thông số (Stat Card) */
+QFrame#StatCard {
+    background-color: #FFFFFF;
     border-radius: 12px;
-    padding: 10px;
-    border: 1px solid transparent;
+    border: 1px solid #E2E8F0;
 }
 
-QLineEdit:focus {
-    border: 1px solid #3b82f6;
+QLabel#StatTitle {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+}
+
+QLabel#StatValue {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+/* Table & Inputs */
+QFrame#SearchCard, QFrame#TableCard {
+    background-color: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+}
+
+QTableWidget#BookingsTable {
+    border: none;
     background-color: white;
 }
 
-/* Button */
-#primaryBtn {
-    background-color: #0f172a;
-    color: white;
-    border-radius: 12px;
+QHeaderView::section {
+    background-color: #F8FAFC;
     padding: 12px;
-    font-weight: bold;
-}
-
-#primaryBtn:hover {
-    background-color: #1e293b;
-}
-
-/* Link */
-#linkBtn {
-    background: transparent;
+    font-weight: 600;
+    color: #64748B;
     border: none;
-    color: #2563eb;
+    border-bottom: 1px solid #E2E8F0;
 }
 
-#linkBtn:hover {
-    text-decoration: underline;
+QPushButton#PrimaryButton {
+    background-color: #005088;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 12px 24px;
 }
 
-/* Small text */
-#smallText {
-    color: #6b7280;
-    font-size: 12px;
+QPushButton#PrimaryButton:hover {
+    background-color: #11CAA0;
 }

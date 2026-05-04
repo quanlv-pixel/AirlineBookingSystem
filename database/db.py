@@ -1,9 +1,3 @@
-"""
-database/db.py
-Kết nối SQLite + khởi tạo schema.
-Chỉ dùng thư viện có sẵn của Python — không cần cài thêm gì.
-"""
-
 import sqlite3
 import os
 
@@ -205,6 +199,43 @@ def execute(sql: str, params: tuple = ()) -> int:
         conn.commit()
         return cur.lastrowid or cur.rowcount
 
+# ── Kiểu trả về gọn ─────────────────────────────────────────
+
+def _row_to_dict(row) -> dict | None:
+    """Chuyển sqlite3.Row thành dict thường."""
+    return dict(row) if row else None
+
+
+# ── CREATE ──────────────────────────────────────────────────
+
+def create_user(first_name: str, last_name: str, email: str,
+                password_hash: str, salt: str,
+                phone: str = None, role: str = "customer") -> int:
+    """
+    Thêm user mới vào DB.
+    """
+    return execute_write(
+        """
+        INSERT INTO users (first_name, last_name, email,
+                           password_hash, salt, phone, role)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (first_name, last_name, email.lower().strip(),
+         password_hash, salt, phone, role)
+    )
+
+
+# ── READ ────────────────────────────────────────────────────
+
+def get_user_by_id(user_id: int) -> dict | None:
+    row = execute_one("SELECT * FROM users WHERE id = ?", (user_id,))
+    return _row_to_dict(row)
+
+
+def get_user_by_email(email: str) -> dict | None:
+    """Tìm user bằng email (phục vụ đăng nhập/đăng ký)."""
+    row = execute_one("SELECT * FROM users WHERE email = ?", (email.lower().strip(),))
+    return _row_to_dict(row)
 
 # ─── Chạy thử trực tiếp ──────────────────────────────────────────────────────
 
