@@ -1,9 +1,12 @@
-/* Tổng thể ứng dụng */
+/* ============================================================
+   SkyBoundAir — style.qss  (PySide6 compatible)
+   ============================================================ */
+
 QWidget {
     font-family: "Segoe UI", "Arial";
 }
 
-/* ── AUTHENTICATION STYLE (Login/Register) ── */
+/* ── AUTH ─────────────────────────────────────────────────── */
 QWidget#AuthWindow {
     background-color: #EEF0F5;
 }
@@ -11,6 +14,7 @@ QWidget#AuthWindow {
 QFrame#AuthCard {
     background-color: #FFFFFF;
     border-radius: 20px;
+    border: none;
 }
 
 QLabel#Title {
@@ -19,11 +23,21 @@ QLabel#Title {
     color: #111827;
 }
 
-/* ── DASHBOARD STYLE ── */
+/* ── DASHBOARD LAYOUT ─────────────────────────────────────── */
 QWidget#DashboardWindow {
     background-color: #F8FAFC;
 }
 
+QScrollArea#MainAreaScroll {
+    border: none;
+    background-color: #F8FAFC;
+}
+
+QWidget#MainAreaWidget {
+    background-color: #F8FAFC;
+}
+
+/* ── SIDEBAR ──────────────────────────────────────────────── */
 QFrame#SidebarFrame {
     background-color: #005088;
     border: none;
@@ -39,11 +53,10 @@ QLabel#SidebarSubBrand {
     color: #11CAA0;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 2px;
 }
 
-/* Sidebar Buttons */
-QPushButton#SidebarBtn, QPushButton#SidebarBtnActive {
+QPushButton#SidebarBtn,
+QPushButton#SidebarBtnActive {
     background-color: transparent;
     border: none;
     border-radius: 8px;
@@ -54,17 +67,57 @@ QPushButton#SidebarBtn, QPushButton#SidebarBtnActive {
 }
 
 QPushButton#SidebarBtn:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 30);
     color: #FFFFFF;
 }
 
 QPushButton#SidebarBtnActive {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 40);
     color: #11CAA0;
     font-weight: 700;
 }
 
-/* Thẻ thông số (Stat Card) */
+QPushButton#SidebarLogoutBtn {
+    background-color: rgba(239, 68, 68, 30);
+    border: 1px solid rgba(239, 68, 68, 80);
+    border-radius: 8px;
+    color: #FCA5A5;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+QPushButton#SidebarLogoutBtn:hover {
+    background-color: rgba(239, 68, 68, 60);
+    color: #FFFFFF;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────────── */
+QLabel#GreetingTitle {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+QLabel#GreetingSub {
+    font-size: 13px;
+    color: #64748B;
+}
+
+QLabel#UserAvatar {
+    background-color: #005088;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 20px;
+    min-width: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    max-height: 40px;
+}
+
+/* ── STAT CARDS ───────────────────────────────────────────── */
 QFrame#StatCard {
     background-color: #FFFFFF;
     border-radius: 12px;
@@ -75,7 +128,6 @@ QLabel#StatTitle {
     font-size: 11px;
     font-weight: 700;
     color: #64748B;
-    text-transform: uppercase;
 }
 
 QLabel#StatValue {
@@ -84,35 +136,111 @@ QLabel#StatValue {
     color: #0F172A;
 }
 
-/* Table & Inputs */
-QFrame#SearchCard, QFrame#TableCard {
+QLabel#StatIcon {
+    font-size: 28px;
+    background-color: #F1F5F9;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+/* ── SEARCH + TABLE CARDS ─────────────────────────────────── */
+QFrame#SearchCard,
+QFrame#TableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 16px;
 }
 
+QLabel#SectionTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+QLabel#InputLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+QComboBox#SearchCombo {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #0F172A;
+    background-color: #F8FAFC;
+    min-height: 42px;
+}
+
+QComboBox#SearchCombo:focus {
+    border: 1px solid #005088;
+    background-color: #FFFFFF;
+}
+
+QComboBox#SearchCombo::drop-down {
+    border: none;
+    width: 24px;
+}
+
+QLineEdit#SearchInput {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: #0F172A;
+    background-color: #F8FAFC;
+    min-height: 42px;
+}
+
+QLineEdit#SearchInput:focus {
+    border: 1px solid #005088;
+    background-color: #FFFFFF;
+}
+
+/* ── TABLE ────────────────────────────────────────────────── */
 QTableWidget#BookingsTable {
     border: none;
-    background-color: white;
+    background-color: #FFFFFF;
+    gridline-color: #F1F5F9;
+    font-size: 13px;
+}
+
+QTableWidget#BookingsTable::item {
+    padding: 10px 12px;
+    color: #334155;
+}
+
+QTableWidget#BookingsTable::item:selected {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
 }
 
 QHeaderView::section {
     background-color: #F8FAFC;
     padding: 12px;
     font-weight: 600;
+    font-size: 12px;
     color: #64748B;
     border: none;
     border-bottom: 1px solid #E2E8F0;
 }
 
+/* ── BUTTONS ──────────────────────────────────────────────── */
 QPushButton#PrimaryButton {
     background-color: #005088;
     color: #FFFFFF;
+    border: none;
     border-radius: 8px;
+    font-size: 14px;
     font-weight: 600;
     padding: 12px 24px;
 }
 
 QPushButton#PrimaryButton:hover {
     background-color: #11CAA0;
+}
+
+QPushButton#PrimaryButton:pressed {
+    background-color: #0D9F80;
 }

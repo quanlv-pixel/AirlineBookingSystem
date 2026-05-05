@@ -1,10 +1,16 @@
+"""
+database/db.py
+Kết nối SQLite + khởi tạo schema + seed data.
+Chỉ dùng thư viện có sẵn của Python.
+"""
+
 import sqlite3
 import os
 
 _ROOT   = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DB_PATH = os.path.join(_ROOT, "database", "airline.db")
 
-# ─── Schema (toàn bộ DDL) ───────────────────────────────────────────────────
+# ─── Schema ──────────────────────────────────────────────────────────────────
 
 _SCHEMA = """
 PRAGMA foreign_keys = ON;
@@ -89,19 +95,17 @@ CREATE INDEX IF NOT EXISTS idx_passengers_book ON passengers(booking_id);
 CREATE INDEX IF NOT EXISTS idx_tickets_booking ON tickets(booking_id);
 """
 
-# ─── Seed data ───────────────────────────────────────────────────────────────
-
 _SEED = """
 INSERT OR IGNORE INTO airports (code, name, city, country) VALUES
-    ('SGN', 'Tân Sơn Nhất', 'Hồ Chí Minh', 'Vietnam'),
-    ('HAN', 'Nội Bài',      'Hà Nội',       'Vietnam'),
-    ('DAD', 'Đà Nẵng',      'Đà Nẵng',      'Vietnam'),
-    ('CXR', 'Cam Ranh',     'Nha Trang',    'Vietnam'),
-    ('HPH', 'Cát Bi',       'Hải Phòng',    'Vietnam'),
-    ('PQC', 'Phú Quốc',     'Phú Quốc',     'Vietnam'),
-    ('BKK', 'Suvarnabhumi', 'Bangkok',      'Thailand'),
-    ('SIN', 'Changi',       'Singapore',    'Singapore'),
-    ('NRT', 'Narita',       'Tokyo',        'Japan');
+    ('SGN', 'Tan Son Nhat', 'Ho Chi Minh', 'Vietnam'),
+    ('HAN', 'Noi Bai',      'Ha Noi',      'Vietnam'),
+    ('DAD', 'Da Nang',      'Da Nang',     'Vietnam'),
+    ('CXR', 'Cam Ranh',     'Nha Trang',   'Vietnam'),
+    ('HPH', 'Cat Bi',       'Hai Phong',   'Vietnam'),
+    ('PQC', 'Phu Quoc',     'Phu Quoc',    'Vietnam'),
+    ('BKK', 'Suvarnabhumi', 'Bangkok',     'Thailand'),
+    ('SIN', 'Changi',       'Singapore',   'Singapore'),
+    ('NRT', 'Narita',       'Tokyo',       'Japan');
 
 INSERT OR IGNORE INTO aircraft (model, total_seats, seat_layout) VALUES
     ('Airbus A321',  180, '3-3'),
@@ -142,30 +146,22 @@ FROM aircraft a, airports o, airports d
 WHERE a.model='Airbus A350' AND o.code='SGN' AND d.code='NRT';
 """
 
-
 # ─── Khởi tạo DB ─────────────────────────────────────────────────────────────
 
 def init_db(seed: bool = True) -> None:
-    """
-    Tạo tất cả bảng nếu chưa có.
-    Gọi 1 lần trong main.py khi app khởi động.
-
-    Args:
-        seed: Nếu True, chèn dữ liệu mẫu airports / aircraft / flights.
-    """
+    """Tạo tất cả bảng + seed data. Gọi 1 lần trong main.py."""
     conn = sqlite3.connect(DB_PATH)
     try:
         conn.executescript(_SCHEMA)
         if seed:
             conn.executescript(_SEED)
         conn.commit()
-        print(f"[db] Database sẵn sàng: {DB_PATH}")
+        print(f"[db] Database san sang: {DB_PATH}")
     except Exception as e:
-        print(f"[db] Lỗi khởi tạo: {e}")
+        print(f"[db] Loi khoi tao: {e}")
         raise
     finally:
         conn.close()
-
 
 # ─── Helpers kết nối ─────────────────────────────────────────────────────────
 
@@ -176,77 +172,32 @@ def get_connection() -> sqlite3.Connection:
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
-
-def fetchall(sql: str, params: tuple = ()) -> list[sqlite3.Row]:
-    """Chạy SELECT, trả về danh sách Row (truy cập theo tên cột)."""
+def fetchall(sql: str, params: tuple = ()) -> list:
+    """Chạy SELECT, trả về danh sách Row."""
     with get_connection() as conn:
         return conn.execute(sql, params).fetchall()
-
 
 def fetchone(sql: str, params: tuple = ()) -> sqlite3.Row | None:
     """Chạy SELECT, trả về 1 Row hoặc None."""
     with get_connection() as conn:
         return conn.execute(sql, params).fetchone()
 
-
 def execute(sql: str, params: tuple = ()) -> int:
-    """
-    Chạy INSERT / UPDATE / DELETE.
-    Trả về lastrowid (INSERT) hoặc rowcount (UPDATE/DELETE).
-    """
+    """Chạy INSERT/UPDATE/DELETE. Trả về lastrowid hoặc rowcount."""
     with get_connection() as conn:
         cur = conn.execute(sql, params)
         conn.commit()
         return cur.lastrowid or cur.rowcount
 
-# ── Kiểu trả về gọn ─────────────────────────────────────────
-
-def _row_to_dict(row) -> dict | None:
-    """Chuyển sqlite3.Row thành dict thường."""
-    return dict(row) if row else None
-
-
-# ── CREATE ──────────────────────────────────────────────────
-
-def create_user(first_name: str, last_name: str, email: str,
-                password_hash: str, salt: str,
-                phone: str = None, role: str = "customer") -> int:
-    """
-    Thêm user mới vào DB.
-    """
-    return execute_write(
-        """
-        INSERT INTO users (first_name, last_name, email,
-                           password_hash, salt, phone, role)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-        """,
-        (first_name, last_name, email.lower().strip(),
-         password_hash, salt, phone, role)
-    )
-
-
-# ── READ ────────────────────────────────────────────────────
-
-def get_user_by_id(user_id: int) -> dict | None:
-    row = execute_one("SELECT * FROM users WHERE id = ?", (user_id,))
-    return _row_to_dict(row)
-
-
-def get_user_by_email(email: str) -> dict | None:
-    """Tìm user bằng email (phục vụ đăng nhập/đăng ký)."""
-    row = execute_one("SELECT * FROM users WHERE email = ?", (email.lower().strip(),))
-    return _row_to_dict(row)
-
-# ─── Chạy thử trực tiếp ──────────────────────────────────────────────────────
+# ─── Aliases để tương thích với code cũ ──────────────────────────────────────
+execute_one   = fetchone   # user_dao.py dùng execute_one
+execute_write = execute    # user_dao.py dùng execute_write
 
 if __name__ == "__main__":
     init_db(seed=True)
-
-    print("\n── Airports ──────────────────────────")
+    print("\n-- Airports --")
     for r in fetchall("SELECT code, city FROM airports ORDER BY code"):
         print(f"  {r['code']}  {r['city']}")
-
-    print("\n── Flights ───────────────────────────")
+    print("\n-- Flights --")
     for r in fetchall("SELECT flight_number, status FROM flights"):
         print(f"  {r['flight_number']}  {r['status']}")
-

@@ -55,18 +55,12 @@ class StatCard(QFrame):
 
 
 class DashboardWidget(QWidget):
-    """
-    Giao diện Dashboard trung tâm của SkyBound Air.
-    Bao gồm: Greeting, Quick Stats, Search Flights và Recent Bookings.
-    """
     logout_clicked = Signal()
-    search_triggered = Signal(dict)  # Truyền dữ liệu tìm kiếm: {from, to, date}
+    search_triggered = Signal(dict)  
 
     def __init__(self, user_info: dict = None, parent=None):
         super().__init__(parent)
         self.setObjectName("DashboardWindow")
-        
-        # Dữ liệu người dùng mặc định nếu không truyền vào
         self.user_info = user_info or {
             "id": 1,
             "first_name": "Khách",
@@ -308,17 +302,15 @@ class DashboardWidget(QWidget):
                 
                 # Truy vấn lịch sử vé gần đây
                 booking_rows = fetchall("""
-                    SELECT b.id as b_id, f.flight_number, 
+                    SELECT b.id as b_id, b.booking_code, f.flight_number,
                            a1.city as origin, a2.city as destination,
                            f.departure_time, b.status
                     FROM bookings b
-                    JOIN tickets t ON t.booking_id = b.id
-                    JOIN flights f ON f.id = t.flight_id
-                    JOIN airports a1 ON a1.id = f.origin_airport_id
-                    JOIN airports a2 ON a2.id = f.destination_airport_id
+                    JOIN flights f  ON f.id  = b.flight_id
+                    JOIN airports a1 ON a1.id = f.origin_id
+                    JOIN airports a2 ON a2.id = f.destination_id
                     WHERE b.user_id = ?
-                    GROUP BY b.id
-                    ORDER BY b.booking_date DESC
+                    ORDER BY b.booked_at DESC
                     LIMIT 5
                 """, (self.user_info["id"],))
                 
@@ -390,7 +382,7 @@ if __name__ == "__main__":
     from PySide6.QtWidgets import QApplication
     
     app = QApplication(sys.argv)
-    app.setStyleSheet(DASHBOARD_QSS)
+    # Style nạp từ main.py qua app.setStyleSheet()
     
     # Test widget
     win = DashboardWidget()
