@@ -9,9 +9,7 @@ from database.db import init_db
 from ui.auth.login_ui import LoginWidget
 from ui.auth.register_ui import RegisterWidget
 
-
 class DummyMainWindow(QMainWindow):
-    """Màn hình tạm thời nếu chưa tạo MainWindow chính thức."""
     def __init__(self, user_info):
         super().__init__()
         self.setWindowTitle("SkyBound Air - Dashboard")
@@ -21,13 +19,19 @@ class DummyMainWindow(QMainWindow):
 
 
 def load_style(app):
-    """Nạp file style CSS."""
-    qss_path = os.path.join("assets", "styles", "auth.qss")
-    if os.path.exists(qss_path):
-        with open(qss_path, "r", encoding="utf-8") as f:
-            app.setStyleSheet(f.read())
-    else:
-        print(f"Warning: Không tìm thấy style tại {qss_path}")
+    combined = ""
+    qss_files = [
+        os.path.join("assets", "styles", "auth.qss"),
+        os.path.join("assets", "styles", "style.qss"),
+    ]
+    for path in qss_files:
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                combined += f.read() + "\n"
+        else:
+            print(f"Warning: Không tìm thấy {path}")
+
+    app.setStyleSheet(combined)
 
 
 def main():

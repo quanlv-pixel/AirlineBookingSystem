@@ -244,3 +244,29 @@ QPushButton#PrimaryButton:hover {
 QPushButton#PrimaryButton:pressed {
     background-color: #0D9F80;
 }
+
+/* ── FLIGHT PAGE ──────────────────────────────────────────── */
+QWidget#FlightPage {
+    background-color: #F1F5F9;
+}
+
+QFrame#FlightCard {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+}
+
+QFrame#FlightCard:hover {
+    border: 1px solid #93C5FD;
+    background-color: #F8FAFC;
+}
+
+QFrame#FilterPanel {
+    background-color: #FFFFFF;
+    border-right: 1px solid #E2E8F0;
+}
+
+QLabel#ResultLabel {
+    font-size: 13px;
+    color: #64748B;
+}
